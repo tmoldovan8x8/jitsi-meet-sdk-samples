@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 // .setFeatureFlag("filmstrip.enabled", false)
                 .setFeatureFlag("video-mute.enabled", false)
                 .setFeatureFlag("audio-mute.enabled", false)
+                .setFeatureFlag("android.audio-focus.disabled", true)
                 .setWelcomePageEnabled(false)
                 .build();
         JitsiMeet.setDefaultConferenceOptions(defaultOptions);
