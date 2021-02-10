@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                 // Different features flags can be set
                 // .setFeatureFlag("toolbox.enabled", false)
                 // .setFeatureFlag("filmstrip.enabled", false)
+                .setFeatureFlag("video-mute.enabled", false)
+                .setFeatureFlag("audio-mute.enabled", false)
                 .setWelcomePageEnabled(false)
                 .build();
         JitsiMeet.setDefaultConferenceOptions(defaultOptions);
