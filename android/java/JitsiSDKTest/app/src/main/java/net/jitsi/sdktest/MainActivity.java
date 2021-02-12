@@ -4,7 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
+import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -22,7 +27,7 @@ import java.net.URL;
 
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AudioManager.OnAudioFocusChangeListener {
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -61,7 +66,25 @@ public class MainActivity extends AppCompatActivity {
         JitsiMeet.setDefaultConferenceOptions(defaultOptions);
 
         registerForBroadcastMessages();
+
+         audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            audioManager.requestAudioFocus(new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                    .setAudioAttributes(
+                            new AudioAttributes.Builder()
+                                    .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                                    .build()
+                    )
+                    .setAcceptsDelayedFocusGain(true)
+                    .setOnAudioFocusChangeListener(this)
+                    .build());
+        } else {
+            audioManager.requestAudioFocus(this, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN);
+        }
     }
+
+    AudioManager audioManager;
 
     @Override
     protected void onDestroy() {
@@ -81,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
                     = new JitsiMeetConferenceOptions.Builder()
                     .setRoom(text)
                     // Settings for audio and video
-                    //.setAudioMuted(true)
-                    //.setVideoMuted(true)
+                    .setAudioMuted(true)
+                    .setVideoMuted(true)
                     .build();
             // Launch the new activity with the given options. The launch() method takes care
             // of creating the required Intent and passing the options.
@@ -127,5 +150,10 @@ public class MainActivity extends AppCompatActivity {
     private void hangUp() {
         Intent hangupBroadcastIntent = BroadcastIntentHelper.buildHangUpIntent();
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(hangupBroadcastIntent);
+    }
+
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+       Log.i("onAudioFocusChange", " " + focusChange);
     }
 }
