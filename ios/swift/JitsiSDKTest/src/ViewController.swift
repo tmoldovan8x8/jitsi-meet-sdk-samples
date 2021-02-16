@@ -34,8 +34,12 @@ class ViewController: UIViewController {
             // builder.token = "SampleJWT"
             builder.welcomePageEnabled = false
             // Set different feature flags
-            builder.setFeatureFlag("toolbox.enabled", withBoolean: false)
-            builder.setFeatureFlag("filmstrip.enabled", withBoolean: false)
+            builder.setFeatureFlag("video-mute.enabled", withValue: false)
+            builder.setFeatureFlag("audio-mute.enabled", withValue: false)
+            builder.setFeatureFlag("overflow-menu.enabled", withValue: false)
+            builder.setFeatureFlag("invite.enabled", withValue: false)
+            builder.setFeatureFlag("conference-timer.enabled", withValue: false)
+            builder.setFeatureFlag("meeting-name.enabled", withValue: false)
         }
         
         JitsiMeet.sharedInstance().defaultConferenceOptions = defaultOptions
