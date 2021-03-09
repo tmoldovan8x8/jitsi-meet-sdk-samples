@@ -115,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
             switch (event.getType()) {
                 case CONFERENCE_JOINED:
                     Timber.i("Conference Joined with url%s", event.getData().get("url"));
+                    Intent toggleScreenShareIntent = BroadcastIntentHelper.buildToggleScreenShareIntent();
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(toggleScreenShareIntent);
                     break;
                 case PARTICIPANT_JOINED:
                     Timber.i("Participant joined%s", event.getData().get("name"));
